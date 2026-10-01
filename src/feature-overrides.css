@@ -1,0 +1,198 @@
+.scroll-rise {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+  transition: opacity 650ms ease, transform 650ms cubic-bezier(.2, .65, .3, 1);
+}
+
+.scroll-rise.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.site-header .menu-toggle { display: none; }
+
+.product-info .variant-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+  color: #8e807b;
+  font-size: 9px;
+}
+
+.variant-picker select {
+  max-width: 68%;
+  border: 1px solid #e9dfdb;
+  background: #fffdfb;
+  border-radius: 2px;
+  padding: 7px 8px;
+  color: #685d59;
+  font: inherit;
+  font-size: 9px;
+}
+
+.product-variant-note { display: block; margin-top: 6px; color: #9c7777; font-size: 8px; line-height: 1.5; }
+
+.add-product-button {
+  margin-top: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  border-bottom: 1px solid #c7a0a0;
+  background: none;
+  padding: 0 0 4px;
+  color: #9b656e;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.catalog-cta {
+  width: fit-content;
+  margin: 30px auto 0;
+  padding: 12px 17px;
+  border: 1px solid #e5d6d0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  color: #87696a;
+  background: #fffaf7;
+  font-size: 10px;
+  transition: background .2s, border-color .2s;
+}
+
+.catalog-cta:hover { background: #f8edeb; border-color: #d5b8b5; }
+
+.dedication-section {
+  background: #f8f2ef;
+  padding-top: 88px;
+  padding-bottom: 92px;
+}
+
+.dedication-included {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #b37980;
+  font: 20px var(--serif);
+  white-space: nowrap;
+}
+
+.dedication-included span { font: 9px 'DM Sans', sans-serif; color: #917f79; }
+
+.dedication-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(24px, 5vw, 70px);
+  align-items: center;
+  padding: clamp(22px, 4vw, 43px);
+  background: #fffdfb;
+  box-shadow: 0 14px 45px #715b5010;
+}
+
+.editor-label { display: block; margin-bottom: 9px; color: #746662; font-size: 10px; font-weight: 600; }
+.message-label { margin-top: 24px; }
+
+.font-options { display: flex; gap: 9px; }
+
+.font-option {
+  min-width: 86px;
+  border: 1px solid #eee4df;
+  background: #fffdfb;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 8px 12px;
+  color: #756863;
+}
+
+.font-option.selected { border-color: #bd8b8f; background: #fcf5f3; box-shadow: 0 0 0 1px #bd8b8f inset; }
+.font-option small { font-size: 8px; }
+.font-option .card-font-serif { font: 20px var(--serif); }
+.font-option .card-font-script { font: 21px 'Dancing Script', cursive; }
+.font-option .card-font-sans { font: 18px 'DM Sans', sans-serif; }
+
+.dedication-editor textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 130px;
+  border: 1px solid #e8ded9;
+  background: #fffdfb;
+  outline: 0;
+  padding: 13px;
+  color: #554946;
+  font: 11px/1.7 'DM Sans', sans-serif;
+}
+
+.dedication-editor textarea:focus { border-color: #c4979b; }
+.dedication-editor textarea::placeholder { color: #b1a49f; }
+.character-count { margin-top: 5px; text-align: right; color: #a09590; font-size: 8px; }
+.editor-hint { margin: 12px 0 0; color: #9b8e88; font-size: 9px; line-height: 1.6; }
+.dedication-preview-wrap { min-width: 0; }
+.dedication-preview-wrap > .preview-label { display: block; margin-bottom: 10px; }
+
+.dedication-preview {
+  min-height: 295px;
+  padding: 34px 26px;
+  border: 1px solid #eee5dc;
+  background: linear-gradient(145deg, #fffefa, #fff8f3 75%, #f9edeb);
+  box-shadow: 0 10px 28px #6e51440c;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+
+.dedication-preview:before, .dedication-preview:after { content: '✿'; position: absolute; color: #c59496; opacity: .65; font-size: 16px; }
+.dedication-preview:before { top: 16px; left: 17px; }
+.dedication-preview:after { bottom: 16px; right: 17px; }
+.card-flower { color: #b77b84; font-size: 24px; margin-bottom: 14px; }
+.dedication-preview p { max-width: 400px; margin: 0; color: #5b4b49; font-size: 19px; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; }
+.card-font-serif { font-family: var(--serif) !important; }
+.card-font-script { font-family: 'Dancing Script', cursive !important; }
+.card-font-sans { font-family: 'DM Sans', sans-serif !important; }
+.card-endmark { margin-top: 20px; color: #947f78; font: italic 12px var(--serif); }
+.card-endmark i { color: #bc858d; font-style: normal; }
+
+.review-dedication { margin-top: 12px; padding: 12px 14px; border: 1px solid #eee4df; background: #fffaf7; }
+.review-dedication > span { color: #9a817c; font-size: 8px; letter-spacing: 1px; }
+.review-dedication p { margin: 7px 0 0; color: #5b4b49; font-size: 13px; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; }
+.delivery-date-field input[type="date"] { min-height: 42px; font-size: 12px; }
+
+.social-section .tiktok-video-frame {
+  width: min(100%, 360px);
+  aspect-ratio: 9 / 16;
+  margin: 24px auto 21px;
+  overflow: hidden;
+  border: 5px solid #fffdfb;
+  border-radius: 10px;
+  background: #211b1c;
+  box-shadow: 0 16px 44px #503d371f;
+}
+.social-section .tiktok-video-frame iframe { display: block; width: 100%; height: 100%; border: 0; }
+.social-section .social-links { margin-top: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-rise, .scroll-rise.is-visible { opacity: 1; transform: none; transition: none; }
+  html { scroll-behavior: auto; }
+}
+
+@media (max-width: 720px) {
+  .site-header .menu-toggle { display: grid; }
+  .catalog-cta { width: 100%; font-size: 9px; }
+  .dedication-section { padding-top: 63px; padding-bottom: 66px; }
+  .dedication-section .section-heading { flex-direction: column; align-items: start; }
+  .dedication-layout { grid-template-columns: 1fr; gap: 27px; padding: 18px; }
+  .dedication-preview { min-height: 245px; padding: 26px 18px; }
+  .dedication-preview p { font-size: 17px; }
+  .font-options { gap: 7px; }
+  .font-option { min-width: 0; flex: 1; padding: 8px 5px; }
+  .variant-picker select { max-width: 72%; font-size: 8px; }
+  .add-product-button { font-size: 9px; }
+  .delivery-date-field { grid-column: span 2; }
+}
