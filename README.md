@@ -110,13 +110,6 @@ Estas funciones **todavía no están implementadas** y requieren definir informa
 6. **Confirmaciones automáticas:** enviar al cliente confirmación y cambios de estado por los canales que el negocio elija.
 7. **Validación de pedidos:** calcular el envío y el total final según ciudad, barrio, fecha y disponibilidad.
 
-## Consideraciones antes de publicar
-
-- Revisa los precios y la disponibilidad del catálogo antes de recibir pedidos reales. El PDF muestra dos precios para la presentación de seis tulipanes: **$98.000** en el cuadro general y **$100.000** en otra página; el sitio presenta $98.000 y recomienda confirmarlo.
-- Las tarifas de domicilio y la cobertura se confirman manualmente por WhatsApp.
-- La fecha del formulario es una solicitud, no una reserva automática.
-- La opción de pago indica la preferencia del cliente; el sitio no solicita números de tarjeta ni credenciales de Nequi.
-- Asegúrate de tener autorización para publicar las fotografías y el contenido de redes sociales utilizados.
 
 ## Git y GitHub
 
