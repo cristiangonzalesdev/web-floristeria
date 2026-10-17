@@ -10,12 +10,14 @@ Los clientes suelen necesitar ver opciones, comparar presentaciones y precios, y
 
 ## Funciones disponibles
 
-- **Diseño responsive:** navegación y contenido adaptados a pantallas de escritorio y móviles.
+- **Diseño pensado para celular:** tarjetas amplias, navegación táctil y filtros horizontales por tamaño; también se adapta a pantallas grandes.
 - **Animaciones al desplazarse:** las secciones y los productos aparecen suavemente al hacer scroll; se respeta la preferencia del sistema por reducir movimiento.
-- **Catálogo filtrable:** productos organizados por categoría, con fotografías, descripciones, precios y presentaciones cuando están disponibles.
-- **Consulta del catálogo completo:** acceso al PDF original de 21 páginas incluido en el proyecto.
+- **Catálogo por tamaños:** opciones XS, S, M, L y XL, con presentaciones, precios, descripciones y fotos de referencia.
+- **Vista ampliada:** cada producto puede abrirse en un detalle con imagen grande, descripción, precio y presentaciones.
+- **Catálogo completo en línea:** enlace directo al catálogo vigente de Sweet Palace: <https://catalogosweetpalace.netlify.app/>.
 - **Bolsa de compra:** agregar arreglos, cambiar cantidades y retirar productos antes de continuar.
 - **Tarjeta dedicatoria:** escribir un mensaje, elegir entre tres estilos de tipografía y consultar una vista previa. El mensaje se incluye en el resumen del pedido.
+- **Solicitud de cambios o extras:** campo opcional para consultar colores, chocolates u otros complementos; la solicitud se envía junto con el pedido y queda sujeta a disponibilidad.
 - **Fecha solicitada de entrega:** selector de fecha que pide agendar con al menos tres días de anticipación. La floristería debe confirmar disponibilidad.
 - **Preferencia de pago:** permite indicar Nequi, tarjeta débito/crédito, PSE o dejar el método por confirmar. Solo comunica una preferencia; no recibe ni procesa datos de pago.
 - **Pedido por WhatsApp:** prepara un mensaje con productos, cantidades, datos de entrega, dedicatoria, fecha y método de pago elegido para que el cliente lo revise y lo envíe.
@@ -29,12 +31,12 @@ Los clientes suelen necesitar ver opciones, comparar presentaciones y precios, y
 - **JavaScript (ES modules)** para el comportamiento del sitio.
 - **CSS** para estilos, animaciones y adaptación responsive.
 - **Lucide React** para los iconos de la interfaz.
-- **pnpm** para instalar dependencias; `pnpm-lock.yaml` registra las versiones resueltas.
+- **npm** para instalar las dependencias indicadas en `package.json`.
 
 ## Requisitos
 
 - Node.js en una versión LTS compatible con Vite.
-- pnpm.
+- npm (se instala junto con Node.js).
 - Visual Studio Code (opcional, recomendado para editar el proyecto).
 
 ## Abrir y ejecutar en Visual Studio Code
@@ -47,11 +49,11 @@ Los clientes suelen necesitar ver opciones, comparar presentaciones y precios, y
    ```
 
 3. Abre una terminal integrada desde **Terminal → Nuevo terminal** y confirma que la ruta actual termina en `pag_floristeria`.
-4. Instala las dependencias y arranca el servidor local:
+4. En la terminal, instala las dependencias y arranca el servidor local:
 
    ```bash
-   pnpm install
-   pnpm run dev
+   npm install
+   npm run dev
    ```
 
 5. Abre en el navegador la dirección local que muestre Vite (normalmente `http://localhost:5173/`). Para detener el servidor, vuelve a la terminal y presiona `Ctrl+C`.
@@ -60,10 +62,10 @@ Los clientes suelen necesitar ver opciones, comparar presentaciones y precios, y
 
 ```bash
 # Crear la compilación de producción en dist/
-pnpm run build
+npm run build
 
 # Servir localmente la compilación ya generada
-pnpm run preview
+npm run preview
 ```
 
 ## Estructura del proyecto
@@ -85,7 +87,7 @@ pag_floristeria/
 │   └── styles.css                # Estilos principales
 ├── index.html
 ├── package.json
-├── pnpm-lock.yaml
+├── package-lock.json
 ├── vite.config.js
 └── README.md
 ```
@@ -93,22 +95,11 @@ pag_floristeria/
 ### Dónde editar contenido
 
 - Los productos, presentaciones, precios y redes sociales están en `src/data/catalog.js`.
-- Las fotografías y el catálogo PDF están en `public/catalogo/`.
+- Las fotos optimizadas están en `public/catalogo/ramos/`; el PDF adjunto inicialmente se conserva en `public/catalogo/` y el catálogo vigente se abre en línea.
 - La estructura de secciones y el flujo del carrito y checkout están en `src/App.jsx`.
 - La tarjeta y sus tipografías están en `src/components/DedicationCard.jsx`.
 - La apariencia general está en `src/styles.css` y `src/feature-overrides.css`.
 
-## Próximas mejoras
-
-Estas funciones **todavía no están implementadas** y requieren definir información del negocio y/o conectar servicios externos:
-
-1. **Confirmar catálogo y precios vigentes:** unificar los valores que difieren en el PDF, revisar disponibilidad y definir precios por zona o presentación.
-2. **Calendario de entregas con disponibilidad real:** bloquear días no disponibles y coordinar horarios, zonas y tarifas de domicilio.
-3. **Pagos en línea:** integrar una pasarela autorizada para Nequi, tarjetas o PSE. La selección actual no efectúa el cobro.
-4. **Backend y base de datos:** guardar pedidos, catálogo, inventario y estados de entrega de forma persistente.
-5. **Panel administrativo:** actualizar precios, productos, disponibilidad y consultar pedidos sin modificar el código.
-6. **Confirmaciones automáticas:** enviar al cliente confirmación y cambios de estado por los canales que el negocio elija.
-7. **Validación de pedidos:** calcular el envío y el total final según ciudad, barrio, fecha y disponibilidad.
 
 
 ## Git y GitHub

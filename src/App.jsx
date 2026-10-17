@@ -6,11 +6,11 @@ import {
 import Header from './components/Header.jsx';
 import ProductCard from './components/ProductCard.jsx';
 import DedicationCard from './components/DedicationCard.jsx';
-import { business, formatMoney, products } from './data/catalog';
+import { business, formatMoney, products, sizeLabels, sizeOrder } from './data/catalog';
 
 const waLink = `https://wa.me/${business.phone}`;
 const dedicationFonts = { serif: 'Elegante', script: 'Manuscrita', sans: 'Sencilla' };
-const catalogPdf = '/catalogo/catalogo-completo.pdf';
+const fullCatalogUrl = 'https://catalogosweetpalace.netlify.app/';
 
 function SectionTitle({ eyebrow, title, body, action }) {
   return <div className="section-heading"><div><span className="eyebrow">{eyebrow}</span><h2>{title}</h2>{body && <p>{body}</p>}</div>{action}</div>;
@@ -48,7 +48,7 @@ function CartPanel({ cart, setCart, close, checkout }) {
 function Checkout({ cart, dedication, close, clearCart }) {
   const [step, setStep] = useState(1);
   const [payment, setPayment] = useState('Por confirmar');
-  const [form, setForm] = useState({ buyer: '', phone: '', email: '', recipient: '', recipientPhone: '', address: '', neighborhood: '', city: '', date: '', instructions: '' });
+  const [form, setForm] = useState({ buyer: '', phone: '', email: '', recipient: '', recipientPhone: '', address: '', neighborhood: '', city: '', date: '', instructions: '', bouquetRequest: '' });
   const earliestDate = new Date();
   earliestDate.setDate(earliestDate.getDate() + 3);
   const minDate = `${earliestDate.getFullYear()}-${String(earliestDate.getMonth() + 1).padStart(2, '0')}-${String(earliestDate.getDate()).padStart(2, '0')}`;
@@ -61,7 +61,7 @@ function Checkout({ cart, dedication, close, clearCart }) {
     const items = cart.map((item) => `• ${item.quantity} × ${item.name} — ${item.needsQuote ? 'precio por confirmar' : formatMoney(item.price)}${item.flowers ? `\n  Flores: ${item.flowers.map((flower) => `${flower.quantity} ${flower.name}`).join(', ')}` : ''}`).join('\n');
     const subtotalLine = hasUnpriced ? `Subtotal de productos confirmados: ${formatMoney(subtotal)}\nAlgunos precios: por confirmar` : `Subtotal de productos: ${formatMoney(subtotal)}`;
     const card = dedication.text ? `DEDICATORIA · Letra ${dedicationFonts[dedication.font]}\n${dedication.text}` : 'DEDICATORIA\nSin mensaje personalizado';
-    const text = `Hola 🌸 Quiero confirmar este pedido de Sweet Palace:\n\n${items}\n\n${subtotalLine}\nEnvío: por cotizar\nForma de pago preferida: ${payment}\n\n${card}\n\nCOMPRADOR\n${form.buyer} · ${form.phone}${form.email ? ` · ${form.email}` : ''}\n\nENTREGA\n${form.recipient} · ${form.recipientPhone}\n${form.address}, ${form.neighborhood}, ${form.city}\nFecha solicitada: ${form.date}\n${form.instructions ? `Indicaciones: ${form.instructions}\n` : ''}\nQuedo pendiente de confirmar disponibilidad, envío y valor final.`;
+    const text = `Hola 🌸 Quiero confirmar este pedido de Sweet Palace:\n\n${items}\n\n${subtotalLine}\nEnvío: por cotizar\nForma de pago preferida: ${payment}\n\n${card}${form.bouquetRequest ? `\n\nCAMBIOS O EXTRAS SOLICITADOS\n${form.bouquetRequest}` : ''}\n\nCOMPRADOR\n${form.buyer} · ${form.phone}${form.email ? ` · ${form.email}` : ''}\n\nENTREGA\n${form.recipient} · ${form.recipientPhone}\n${form.address}, ${form.neighborhood}, ${form.city}\nFecha solicitada: ${form.date}\n${form.instructions ? `Indicaciones: ${form.instructions}\n` : ''}\nQuedo pendiente de confirmar disponibilidad, envío y valor final.`;
     window.open(`${waLink}?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
     clearCart();
     close();
@@ -84,12 +84,13 @@ function Checkout({ cart, dedication, close, clearCart }) {
           <label>Ciudad<input required value={form.city} onChange={update('city')} /></label>
           <label className="delivery-date-field">Elige el día de entrega<input required type="date" min={minDate} value={form.date} onChange={update('date')} /><small>El catálogo recomienda agendar con al menos 3 días. Confirmaremos disponibilidad.</small></label>
           <label className="span-two">Indicaciones para la entrega <span className="optional">(opcional)</span><textarea value={form.instructions} onChange={update('instructions')} rows="2" /></label>
+          <label className="span-two">¿Quieres solicitar algún cambio o extra? <span className="optional">(opcional, sujeto a disponibilidad)</span><textarea value={form.bouquetRequest} onChange={update('bouquetRequest')} rows="3" maxLength="500" placeholder="Por ejemplo: cambiar el color del papel, añadir chocolates o consultar por un peluche…" /></label>
         </div>
         <div className="checkout-nav"><button type="button" className="outline-button" onClick={close}>Volver a la bolsa</button><button type="button" className="primary-button" onClick={(event) => { const invalid = event.currentTarget.form?.querySelector(':invalid'); if (invalid) invalid.reportValidity(); else setStep(2); }}>Continuar <ChevronRight size={16} /></button></div>
       </div> : <div className="checkout-fields">
         <button type="button" className="back-link" onClick={() => setStep(1)}><ChevronLeft size={15} /> Editar datos de entrega</button>
         <h3>Revisa tu pedido y elige cómo prefieres pagar</h3>
-        <div className="review-box"><strong>{cart.reduce((n, item) => n + item.quantity, 0)} productos</strong><span>{hasUnpriced ? 'Total por confirmar' : formatMoney(subtotal)} <small>{hasUnpriced ? 'precios y envío se confirmarán' : '+ envío por confirmar'}</small></span><div>{form.recipient} · {form.address}, {form.city}<br />Entrega solicitada: {form.date}</div></div>
+        <div className="review-box"><strong>{cart.reduce((n, item) => n + item.quantity, 0)} productos</strong><span>{hasUnpriced ? 'Total por confirmar' : formatMoney(subtotal)} <small>{hasUnpriced ? 'precios y envío se confirmarán' : '+ envío por confirmar'}</small></span><div>{form.recipient} · {form.address}, {form.city}<br />Entrega solicitada: {form.date}{form.bouquetRequest && <><br /><strong>Cambios o extras:</strong> {form.bouquetRequest}</>}</div></div>
         <div className="review-dedication"><span>DEDICATORIA · LETRA {dedicationFonts[dedication.font]?.toUpperCase()}</span><p className={`card-font-${dedication.font}`}>{dedication.text || 'Sin mensaje personalizado'}</p></div>
         <div className="payment-options">{['Nequi', 'Tarjeta débito/crédito', 'PSE', 'Por confirmar'].map((option) => <label key={option} className={payment === option ? 'payment-option selected' : 'payment-option'}><input type="radio" name="payment" value={option} checked={payment === option} onChange={() => setPayment(option)} /><span className="radio-dot" /><span>{option}</span>{payment === option && <Check size={16} />}</label>)}</div>
         <p className="payment-note">Indica tu método preferido. Esta versión no procesa pagos en línea ni solicita datos de tarjeta; Sweet Palace confirmará el total y las instrucciones de pago.</p>
@@ -103,11 +104,13 @@ export default function App() {
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [checkout, setCheckout] = useState(false);
-  const [activeCategory, setActiveCategory] = useState('Todos');
+  const [activeSize, setActiveSize] = useState('Todos');
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const [notice, setNotice] = useState('');
   const [dedication, setDedication] = useState({ text: '', font: 'serif' });
-  const categories = useMemo(() => ['Todos', ...new Set(products.map((product) => product.category))], []);
-  const filtered = activeCategory === 'Todos' ? products : products.filter((product) => product.category === activeCategory);
+  const sizes = useMemo(() => sizeOrder.filter((size) => products.some((product) => product.size === size)), []);
+  const filtered = activeSize === 'Todos' ? products : products.filter((product) => product.size === activeSize);
+  const groupedProducts = activeSize === 'Todos' ? sizes.map((size) => ({ size, products: products.filter((product) => product.size === size) })) : [{ size: activeSize, products: filtered }];
   const cartCount = cart.reduce((count, item) => count + item.quantity, 0);
 
   useEffect(() => {
@@ -125,7 +128,7 @@ export default function App() {
       if (!element.classList.contains('is-visible')) observer.observe(element);
     });
     return () => observer.disconnect();
-  }, [activeCategory]);
+  }, [activeSize]);
 
   const addItem = (product) => {
     setCart((current) => {
@@ -148,11 +151,12 @@ export default function App() {
       <section className="promise-strip"><div><Flower2 /><span>Arreglos hechos a mano</span></div><i /><div><Heart /><span>Dedicatoria en tu ramo</span></div><i /><div><Truck /><span>Entrega coordinada contigo</span></div></section>
 
       <section className="catalog-section section-shell" id="catalogo">
-        <SectionTitle eyebrow="UNA FLOR DICE MUCHO" title={<>Detalles para cada <em>momento</em></>} body="Encuentra ese arreglo que dice justo lo que estás sintiendo." action={<a className="view-all" href={catalogPdf} target="_blank" rel="noreferrer">Ver catálogo completo <BookOpen size={16} /></a>} />
-        <div className="category-tabs">{categories.map((category) => <button key={category} className={activeCategory === category ? 'category-tab active' : 'category-tab'} onClick={() => setActiveCategory(category)}>{category}</button>)}</div>
-        <div className="product-grid">{filtered.map((product) => <ProductCard key={product.id} product={product} onAdd={addItem} />)}</div>
-        <p className="availability-note"><Sparkles size={16} /> Algunas flores dependen de disponibilidad. Confirma el precio de seis tulipanes antes de realizar tu pedido.</p>
-        <a className="catalog-cta" href={catalogPdf} target="_blank" rel="noreferrer"><BookOpen size={17} /> Explorar las 21 páginas del catálogo <ArrowRight size={16} /></a>
+        <SectionTitle eyebrow="UNA FLOR DICE MUCHO" title={<>Detalles para cada <em>momento</em></>} body="Encuentra ese arreglo que dice justo lo que estás sintiendo." action={<a className="view-all" href={fullCatalogUrl} target="_blank" rel="noreferrer">Ver catálogo completo <BookOpen size={16} /></a>} />
+        <p className="catalog-intro">Explora {products.length} diseños y presentaciones del catálogo, agrupados por tamaño.</p>
+        <div className="category-tabs size-tabs" aria-label="Filtrar ramos por tamaño">{['Todos', ...sizes].map((size) => <button key={size} className={activeSize === size ? 'category-tab active' : 'category-tab'} onClick={() => setActiveSize(size)}>{size === 'Todos' ? 'Todos' : sizeLabels[size]}</button>)}</div>
+        {groupedProducts.map(({ size, products: sectionProducts }) => <section className="size-group" key={size} aria-labelledby={`size-${size}`}><div className="size-group-heading"><div><span className="eyebrow">TAMAÑO {size}</span><h3 id={`size-${size}`}>{sizeLabels[size].split(' · ')[1]}</h3></div><span>{sectionProducts.length} {sectionProducts.length === 1 ? 'diseño' : 'diseños'}</span></div><div className="product-grid">{sectionProducts.map((product) => <ProductCard key={product.id} product={product} onAdd={addItem} onView={setSelectedProduct} />)}</div></section>)}
+        <p className="availability-note"><Sparkles size={16} /> Las imágenes son de referencia; flores, tonos y disponibilidad pueden variar. El envío se confirma según la zona.</p>
+        <a className="catalog-cta" href={fullCatalogUrl} target="_blank" rel="noreferrer"><BookOpen size={17} /> Abrir catálogo completo en línea <ArrowRight size={16} /></a>
       </section>
 
       <DedicationCard value={dedication} onChange={setDedication} />
@@ -177,6 +181,7 @@ export default function App() {
         <div className="social-links"><a href={business.instagram} target="_blank" rel="noreferrer"><Camera /> Instagram <ArrowRight size={15} /></a><a href={`https://www.tiktok.com/@sweetpalacesp/video/${business.tiktokVideoId}`} target="_blank" rel="noreferrer"><span className="tiktok-glyph">♪</span> Ver en TikTok <ArrowRight size={15} /></a></div>
       </section>
     </main>
+    {selectedProduct && <div className="overlay lightbox-overlay" onMouseDown={(event) => event.target === event.currentTarget && setSelectedProduct(null)}><section className="product-lightbox" role="dialog" aria-modal="true" aria-label={`Detalle de ${selectedProduct.name}`}><button className="icon-button lightbox-close" aria-label="Cerrar detalle" onClick={() => setSelectedProduct(null)}><X /></button><img src={selectedProduct.image} alt={selectedProduct.name} /><div className="lightbox-info"><span className="eyebrow">TAMAÑO {selectedProduct.size} · {sizeLabels[selectedProduct.size]?.split(' · ')[1]}</span><h2>{selectedProduct.name}</h2><strong>{formatMoney(selectedProduct.variants?.[0]?.price ?? selectedProduct.price)}{selectedProduct.variants?.length ? ' en adelante' : ''}</strong><p>{selectedProduct.description}</p><div>{selectedProduct.details}</div>{selectedProduct.variants?.length > 0 && <p className="lightbox-variants">Presentaciones: {selectedProduct.variants.map((variant) => `${variant.label} (${formatMoney(variant.price)})`).join(' · ')}</p>}<button className="primary-button" onClick={() => { const variant = selectedProduct.variants?.[0]; addItem(variant ? { ...selectedProduct, ...variant, id: `${selectedProduct.id}-${variant.id}`, name: `${selectedProduct.name} · ${variant.label}` } : selectedProduct); setSelectedProduct(null); }}>Agregar al pedido <Plus size={16} /></button></div></section></div>}
     <footer className="site-footer"><a className="brand footer-brand" href="#inicio"><span className="brand-mark"><Flower2 size={20} /></span><span><strong>sweet palace</strong><small>FLORES QUE HABLAN POR TI</small></span></a><span>Un detalle, mil emociones. <i>♡</i></span><nav><a href="#catalogo">Catálogo</a><a href="#dedicatoria">Dedicatoria</a><a href={waLink} target="_blank" rel="noreferrer">Contacto</a></nav><small>© {new Date().getFullYear()} Sweet Palace · Hecho con amor</small></footer>
     <a className="floating-whatsapp" href={waLink} target="_blank" rel="noreferrer" aria-label="Escríbenos por WhatsApp"><MessageCircle size={21} /><span>¿Te ayudamos?</span></a>
     {cartOpen && <CartPanel cart={cart} setCart={setCart} close={() => setCartOpen(false)} checkout={() => { setCartOpen(false); setCheckout(true); }} />}
